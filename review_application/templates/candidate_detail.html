@@ -1,0 +1,125 @@
+{% extends "base.html" %} {% block head_block %}
+<style media="screen">
+    .showme {
+        display: none;
+    }
+
+    .card:hover .showme {
+        display: block;
+    }
+
+    #myBtn {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        background-color: #80669d;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 4px;
+    }
+
+    #myBtn:hover {
+        background-color: #555;
+    }
+</style>
+
+<script>
+    var mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+{% endblock %} {% block body_block %}
+
+<h1 class="center-center">Job Application Review Portal</h1>
+
+<br />
+<div class="text-center">
+    <a
+        class="btn btn-primary"
+        style="margin-top: 25px; margin-bottom: 25px"
+        href="{% url 'review_application:homepage' %}"
+        >Go to homepage</a
+    >
+</div>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+<br />
+
+<div id="pers">
+    <h2 class="text-center">Personal Details</h2>
+    <h3>Name: {{personal.name}}</h3>
+    <h3>Email: {{personal.email}}</h3>
+    <h3>Status: {{personal.status}}</h3>
+</div>
+
+<br />
+<br />
+
+<div id="prof" class="text-center">
+    <h2>Professional Experience</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 m-5 pb-5">
+        {% for exp in professional %}
+        <div class="col">
+            <div class="card" style="max-width: 18rem">
+                <div class="card-body">
+                    <h5 class="card-title">{{exp.company}}</h5>
+                    <h6 class="card-title">{{exp.title}}</h6>
+                    <p class="card-text">Start Date: {{exp.start_date}}</p>
+                    <p class="card-text">End Date: {{exp.end_date}}</p>
+                    <p class="card-text">Description: {{exp.description}}</p>
+                </div>
+                <br />
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="acad" class="text-center">
+    <h2>Academic Information</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 m-5 pb-5">
+        {% for ac in academic %}
+        <div class="col">
+            <div class="card" style="max-width: 18rem">
+                <div class="card-body">
+                    <h5 class="card-title">{{ac.education}}</h5>
+                    <h6 class="card-title">Degree: {{ac.degree}}</h6>
+                    <p class="card-text">Major: {{ac.major}}</p>
+                    <p class="card-text">GPA: {{ac.gpa}}</p>
+                    <p class="card-text">Max GPA: {{ac.gpa_max}}</p>
+                </div>
+                <br />
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

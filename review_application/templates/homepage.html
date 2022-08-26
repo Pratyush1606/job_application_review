@@ -1,0 +1,203 @@
+{% extends "base.html" %} {% block head_block %}
+<style media="screen">
+    .showme {
+        display: none;
+    }
+
+    .card:hover .showme {
+        display: block;
+    }
+
+    #myBtn {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        background-color: #80669d;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 4px;
+    }
+
+    #myBtn:hover {
+        background-color: #555;
+    }
+</style>
+
+<script>
+    var mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+{% endblock %} {% block body_block %}
+
+<h1 class="center-center">Job Application Review Portal</h1>
+
+<br />
+<div class="text-center">
+    <a
+        class="btn btn-primary"
+        style="margin-top: 25px; margin-bottom: 25px"
+        href="{% url 'review_application:pers_detail' %}"
+        >Add a new Candidate</a
+    >
+</div>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+<br />
+<br />
+<br />
+
+<div>
+    <div class="card-columns" id="cards"></div>
+</div>
+
+{{ candidates|json_script:"candidates" }}
+<script>
+    const candidates = JSON.parse(
+        document.getElementById("candidates").textContent
+    );
+
+    let cards = document.getElementById("cards");
+    for (let i = 0; i < candidates.length; i++) {
+        let candidate = candidates[i];
+        let div1 = document.createElement("div");
+        div1.className = "card";
+        div1.style.maxWidth = "18rem";
+        div1.style.backgroundColor = "white";
+
+        // Changing the color of the candidate if rejected/accepted
+        if (candidate.status === "rejected") {
+            div1.style.backgroundColor = "salmon";
+        } else if (candidate.status === "accepted") {
+            div1.style.backgroundColor = "green";
+        }
+
+        let div2 = document.createElement("div");
+        div2.className = "card-body";
+
+        // Making Name heading
+        let head5 = document.createElement("h5");
+        head5.className = "card-title";
+        head5.innerText = candidate.name;
+
+        // Displaying email, phone and status
+        let emailP = document.createElement("P");
+        let phoneP = document.createElement("P");
+        let statusP = document.createElement("P");
+        emailP.innerText = "Email: " + candidate.email;
+        phoneP.innerText = "Phone: " + candidate.phone;
+        statusP.innerText = "Status: " + candidate.status;
+
+        div2.appendChild(head5);
+        div2.appendChild(emailP);
+        div2.appendChild(phoneP);
+        div2.appendChild(statusP);
+
+        // Putting buttons based on status
+        if (candidate.status === "applied") {
+            // Accept button
+            let accept = document.createElement("a");
+            accept.type = "button";
+            accept.className = "btn btn-outline-success";
+            accept.innerText = "Accept";
+
+            // API Call on being Accepted
+            var csrftoken = getCookie("csrftoken");
+            accept.onclick = function () {
+                var url = "accept/" + candidate.candidate_id;
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                });
+            };
+
+            // Reject button
+            let reject = document.createElement("a");
+            reject.type = "button";
+            reject.className = "btn btn-outline-danger";
+            reject.innerText = "Reject";
+
+            // API Call on being Rejected
+            var csrftoken = getCookie("csrftoken");
+            reject.onclick = function () {
+                var url = "reject/" + candidate.candidate_id;
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                    },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                });
+            };
+
+            div2.appendChild(accept);
+            div2.appendChild(reject);
+        }
+
+        // Detail Button
+        let detail = document.createElement("a");
+        detail.type = "button";
+        detail.className = "btn btn-primary";
+        detail.innerText = "Get Detail";
+        detail.href = "cand_detail/" + candidate.candidate_id;
+        div2.appendChild(detail);
+
+        div1.appendChild(div2);
+        cards.appendChild(div1);
+    }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === name + "=") {
+                    cookieValue = decodeURIComponent(
+                        cookie.substring(name.length + 1)
+                    );
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %} {% block body_block %}
+
+<h2>Add Porfessional Experience</h2>
+<div class="text-center">
+    <a
+        class="btn btn-primary"
+        style="margin-top: 25px; margin-bottom: 25px"
+        href="{% url 'review_application:homepage' %}"
+        >Go to homepage</a
+    >
+</div>
+<h3>Hello, {{candidate.name}}. Please add your professional experience.</h3>
+
+<div id="acad" class="jumbotron">
+    <form
+        action="{% url 'review_application:prof_exp' candidate.candidate_id %}"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="company">Company</label>
+            <input
+                type="text"
+                class="form-control"
+                id="company"
+                name="company"
+                value=""
+                placeholder="Please enter your Company Name"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                value=""
+                placeholder="Please enter your position"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="start_date">Start Date</label>
+            <input
+                type="date"
+                class="form-control"
+                id="start_date"
+                name="start_date"
+                value=""
+                placeholder="Please enter start date"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="end_date">End Date</label>
+            <input
+                type="date"
+                class="form-control"
+                id="end_date"
+                name="end_date"
+                value=""
+                placeholder="Please enter end date"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="currently_working">Currently working here</label>
+            <input
+                type="checkbox"
+                class="form-control"
+                id="currently_working"
+                name="currently_working"
+                value="False"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input
+                type="text"
+                class="form-control"
+                id="description"
+                name="description"
+                value=""
+                placeholder="Please enter description"
+                required
+            />
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary" onsubmit="reset()">
+                Add Professional Detail
+            </button>
+        </div>
+    </form>
+    <div class="text-center">
+        <a
+            class="btn btn-primary"
+            href="{% url 'review_application:homepage' %}"
+            >Skip and go to Homepage</a
+        >
+    </div>
+</div>
+
+{% endblock %}

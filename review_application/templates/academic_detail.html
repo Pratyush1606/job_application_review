@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% block body_block %}
+
+<h2>Add Academic Detail</h2>
+<div class="text-center">
+    <a
+        class="btn btn-primary"
+        style="margin-top: 25px; margin-bottom: 25px"
+        href="{% url 'review_application:homepage' %}"
+        >Go to homepage</a
+    >
+</div>
+<h3>Hello, {{candidate.name}}.</h3>
+<h4>
+    Please add academic detail. If you don't have to add academic information,
+    please skip and add professional details.
+</h4>
+<div id="acad" class="jumbotron">
+    <form
+        action="{% url 'review_application:acad' candidate.candidate_id %}"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="education">Education</label>
+            <input
+                type="text"
+                class="form-control"
+                id="education"
+                name="education"
+                value=""
+                placeholder="Please enter your College/University name"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="degree">Degree</label>
+            <input
+                type="text"
+                class="form-control"
+                id="degree"
+                name="degree"
+                value=""
+                placeholder="Please enter your Degree"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="major">Major</label>
+            <input
+                type="text"
+                class="form-control"
+                id="major"
+                name="major"
+                value=""
+                placeholder="Please enter your Major"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="graduation_year">Graduation Year</label>
+            <input
+                type="number"
+                min="1900"
+                max="2099"
+                step="1"
+                value="2016"
+                class="form-control"
+                id="graduation_year"
+                name="graduation_year"
+                placeholder="Please enter your Graduation Year"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="gpa">GPA</label>
+            <input
+                type="number"
+                step="any"
+                class="form-control"
+                id="gpa"
+                name="gpa"
+                value=""
+                placeholder="Please enter your GPA"
+                required
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="gpa_max">Max GPA</label>
+            <input
+                type="number"
+                step="any"
+                class="form-control"
+                id="gpa_max"
+                name="gpa_max"
+                value=""
+                placeholder="Please enter Max GPA"
+                required
+            />
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary" onsubmit="reset()">
+                Add Academic Detail
+            </button>
+        </div>
+    </form>
+    <div class="text-center">
+        <a
+            class="btn btn-primary"
+            href="{% url 'review_application:prof_exp' candidate.candidate_id %}"
+            >Skip and Add Professional Experience</a
+        >
+    </div>
+</div>
+
+{% endblock %}
