@@ -6,8 +6,16 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from review_application.models import Candidate, CandidateAcademic, CandidateProfessionalExp
-from review_application.serializers import CandidateSerializer, CandidateAcademicSerializer, CandidateProfessionalExpSerializer
+from review_application.models import (
+    Candidate,
+    CandidateAcademic,
+    CandidateProfessionalExp,
+)
+from review_application.serializers import (
+    CandidateSerializer,
+    CandidateAcademicSerializer,
+    CandidateProfessionalExpSerializer,
+)
 
 
 class CandidateList(APIView):
@@ -16,25 +24,27 @@ class CandidateList(APIView):
     def get(self, request):
         candidates = Candidate.objects.all()
         candidates_serilaizers = CandidateSerializer(candidates, many=True)
-        return Response(data={"candidates": candidates_serilaizers.data},
-                        template_name="homepage.html",
-                        status=status.HTTP_200_OK)
+        return Response(
+            data={"candidates": candidates_serilaizers.data},
+            template_name="homepage.html",
+            status=status.HTTP_200_OK,
+        )
 
 
 class AddPersonalDetail(APIView):
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request):
-        return Response(template_name="personal_detail.html",
-                        status=status.HTTP_200_OK)
+        return Response(template_name="personal_detail.html", status=status.HTTP_200_OK)
 
     def post(self, request):
         details = request.POST
         serializer = CandidateSerializer(data=details)
-        if (serializer.is_valid()):
+        if serializer.is_valid():
             serializer.save()
-            return redirect("review_application:acad",
-                            candidate_id=serializer.data["candidate_id"])
+            return redirect(
+                "review_application:acad", candidate_id=serializer.data["candidate_id"]
+            )
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -48,9 +58,11 @@ class AddAcademicDetail(APIView):
         except Candidate.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         candidate_details = CandidateSerializer(candidate).data
-        return Response(data={"candidate": candidate_details},
-                        template_name="academic_detail.html",
-                        status=status.HTTP_200_OK)
+        return Response(
+            data={"candidate": candidate_details},
+            template_name="academic_detail.html",
+            status=status.HTTP_200_OK,
+        )
 
     def post(self, request, candidate_id):
         try:
@@ -61,11 +73,13 @@ class AddAcademicDetail(APIView):
         details = request.POST.copy()
         details["candidate_id"] = candidate_id
         serializer = CandidateAcademicSerializer(data=details)
-        if (serializer.is_valid()):
+        if serializer.is_valid():
             serializer.save()
-            return Response({"candidate": candidate_details},
-                            template_name="academic_detail.html",
-                            status=status.HTTP_200_OK)
+            return Response(
+                {"candidate": candidate_details},
+                template_name="academic_detail.html",
+                status=status.HTTP_200_OK,
+            )
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -78,9 +92,11 @@ class AddProfessionalDetail(APIView):
         except Candidate.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         candidate_details = CandidateSerializer(candidate).data
-        return Response({"candidate": candidate_details},
-                        template_name="professional_detail.html",
-                        status=status.HTTP_200_OK)
+        return Response(
+            {"candidate": candidate_details},
+            template_name="professional_detail.html",
+            status=status.HTTP_200_OK,
+        )
 
     def post(self, request, candidate_id):
         try:
@@ -91,11 +107,13 @@ class AddProfessionalDetail(APIView):
         details = request.POST.copy()
         details["candidate_id"] = candidate_id
         serializer = CandidateProfessionalExpSerializer(data=details)
-        if (serializer.is_valid()):
+        if serializer.is_valid():
             serializer.save()
-            return Response({"candidate": candidate_details},
-                            template_name="professional_detail.html",
-                            status=status.HTTP_200_OK)
+            return Response(
+                {"candidate": candidate_details},
+                template_name="professional_detail.html",
+                status=status.HTTP_200_OK,
+            )
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -116,22 +134,21 @@ class CandidateDetail(APIView):
         academic_detail = CandidateAcademicSerializer(academics, many=True).data
 
         # Getting Professional Details
-        prof_exps = CandidateProfessionalExp.objects.filter(
-            candidate_id=candidate_id)
-        prof_detail = CandidateProfessionalExpSerializer(prof_exps,
-                                                         many=True).data
+        prof_exps = CandidateProfessionalExp.objects.filter(candidate_id=candidate_id)
+        prof_detail = CandidateProfessionalExpSerializer(prof_exps, many=True).data
 
-        return Response(data={
-            "personal": personal_detail,
-            "academic": academic_detail,
-            "professional": prof_detail
-        },
-                        template_name="candidate_detail.html",
-                        status=status.HTTP_200_OK)
+        return Response(
+            data={
+                "personal": personal_detail,
+                "academic": academic_detail,
+                "professional": prof_detail,
+            },
+            template_name="candidate_detail.html",
+            status=status.HTTP_200_OK,
+        )
 
 
 class Reject(APIView):
-
     def post(self, request, candidate_id):
         try:
             candidate = Candidate.objects.get(candidate_id=candidate_id)
@@ -143,7 +160,6 @@ class Reject(APIView):
 
 
 class Accept(APIView):
-
     def post(self, request, candidate_id):
         try:
             candidate = Candidate.objects.get(candidate_id=candidate_id)
