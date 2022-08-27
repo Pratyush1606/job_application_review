@@ -3,11 +3,12 @@
 A web portal for reviewing job applications. It is a full stack application made with Django and Django Rest Framework.
 
 ---
-
+**Deployment Link**: [job application review](https://job-application-review.herokuapp.com/)  
 **Source Code Link**: [job application review](https://github.com/Pratyush1606/job_application_review)
 
 ## **Technologies**
 
+* **Deployment Link**: [job application review](https://job-application-review.herokuapp.com/)
 * [Django](https://www.djangoproject.com/): Django builds better web apps with less code
 * [DRF](www.django-rest-framework.org/): A powerful and flexible toolkit for building Rest APIs with Django
 * Database used: [SQLite](https://www.sqlite.org/index.html) (for local testing), [PostgreSQL](https://www.psycopg.org/) (for deployment)
