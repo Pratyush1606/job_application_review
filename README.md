@@ -1,6 +1,6 @@
 # Job Application Review Portal
 
-A web portal for reviewing job applications. It is a full stack application made with Django and Django Rest Framework.
+A web portal for reviewing job applications. It is a full stack application made with Django and Django Rest Framework and deployed on Heroku.
 
 ---
 **Deployment Link**: [job application review](https://job-application-review.herokuapp.com/)  
