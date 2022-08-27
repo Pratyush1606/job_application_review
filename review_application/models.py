@@ -12,9 +12,9 @@ class Candidate(models.Model):
 
 
 class CandidateAcademic(models.Model):
-    candidate_id = models.ForeignKey(to=Candidate,
-                                     related_name='candidate_acad',
-                                     on_delete=models.CASCADE)
+    candidate_id = models.ForeignKey(
+        to=Candidate, related_name="candidate_acad", on_delete=models.CASCADE
+    )
     education = models.CharField(max_length=50)
     degree = models.CharField(max_length=50)
     major = models.CharField(max_length=50)
@@ -24,9 +24,9 @@ class CandidateAcademic(models.Model):
 
 
 class CandidateProfessionalExp(models.Model):
-    candidate_id = models.ForeignKey(to=Candidate,
-                                     related_name='candidate_prof_exp',
-                                     on_delete=models.CASCADE)
+    candidate_id = models.ForeignKey(
+        to=Candidate, related_name="candidate_prof_exp", on_delete=models.CASCADE
+    )
     company = models.CharField(max_length=50)
     title = models.CharField(max_length=50)
     start_date = models.DateField()
